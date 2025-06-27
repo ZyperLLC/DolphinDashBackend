@@ -1,6 +1,6 @@
 
 const express = require('express');
-const userRouter = express.Router();
+const router = express.Router();
 
 router.post('/register', /* controller function here */);
 router.post('/deposit/:telegramId', );
@@ -20,4 +20,5 @@ router.delete('/:telegramId', /* controller function here */);
 
 router.get('/', /* controller function here */);
 
+const userRouter = router;
 module.exports = userRouter;
