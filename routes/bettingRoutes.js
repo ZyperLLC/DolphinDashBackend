@@ -1,15 +1,23 @@
-
 const express = require('express');
-const bettingRouter = express.Router();
+const router = express.Router();
+const bettingController = require('../controllers/bettingController');
 
-router.post('/startbet', /* controller function here */);
-router.post('/endbet',);
+// Create a new bet round
+router.post('/startbet', bettingController.startBet);
 
-router.get('/',); //get all bets
-router.get('/getbet/:betId', /* controller function here */);
+// End a bet round
+router.post('/endbet', bettingController.endBet);
 
-router.put('/updatebet/:betId', /* controller function here */);
+// Get all bet rounds
+router.get('/', bettingController.getAllBets);
 
-router.delete('/:telegramId', /* controller function here */);
+// Get bet round by ID
+router.get('/getbet/:betId', bettingController.getBetsByBetId);
 
-module.exports = bettingRouter;
+// Update totalBets and totalAmount
+router.put('/updatebet/:betId', bettingController.updateBet);
+
+// Remove this unless you have a use-case
+// router.delete('/:telegramId', someUserControllerFunc);
+
+module.exports = router;
