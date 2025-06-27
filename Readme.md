@@ -50,7 +50,7 @@ This is a backend REST API built with **Node.js**, **Express**, and **MongoDB** 
  node server.js
 
 ## 🔗  Base URL
-http://localhost:5000/api
+http://localhost:3000/api
 
 
 ## 🧪 API Endpoints
