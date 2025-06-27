@@ -1,23 +1,53 @@
-
 const express = require('express');
 const userRouter = express.Router();
+const userController = require('../controllers/userController');
 
-router.post('/register', /* controller function here */);
-router.post('/deposit/:telegramId', );
-router.post('/placebet/:telegramId',);
-router.post('/stakenft/:telegramId',);
-router.post('/invite/:telegramId',);
-router.post('/witdhraw/:telegramId',);
+// Register a new user
+userRouter.post('/register', userController.registerUser);
 
+// Deposit TON or credits
+userRouter.post('/deposit/:telegramId', userController.depositTo);
 
-router.get('/getuser/:telegramId', /* controller function here */);
-router.get('/getbetsbyuser/:telegramId',);
-router.get('/getstakednfts/:telegramId',);
+// Place a bet
+userRouter.post('/placebet/:telegramId', userController.placeBet);
 
-router.put('/:telegramId', /* controller function here */);
+// Stake NFT (stub - create this function if needed)
+userRouter.post('/stakenft/:telegramId', (req, res) => {
+  res.send("Stake NFT - to be implemented");
+});
 
-router.delete('/:telegramId', /* controller function here */);
+// Invite friend (stub - create this function if needed)
+userRouter.post('/invite/:telegramId', (req, res) => {
+  res.send("Invite Friend - to be implemented");
+});
 
-router.get('/', /* controller function here */);
+// Withdraw funds
+userRouter.post('/withdraw/:telegramId', userController.withdraw);
+
+// Get a single user
+userRouter.get('/getuser/:telegramId', userController.getUser);
+
+// Get user's bets
+userRouter.get('/getbetsbyuser/:telegramId', userController.getBetsByUser);
+
+// Get staked NFTs (stub - needs to be implemented)
+userRouter.get('/getstakednfts/:telegramId', (req, res) => {
+  res.send("Get staked NFTs - to be implemented");
+});
+
+// Update user info (generic PUT)
+userRouter.put('/:telegramId', (req, res) => {
+  res.send("Update user - to be implemented");
+});
+
+// Delete a user
+userRouter.delete('/:telegramId', (req, res) => {
+  res.send("Delete user - to be implemented");
+});
+
+// Get all users
+userRouter.get('/', (req, res) => {
+  res.send("Get all users - to be implemented");
+});
 
 module.exports = userRouter;
