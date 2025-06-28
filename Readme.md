@@ -1,6 +1,6 @@
-# 🎰 Betting App API
+# 🎰 Zyper Dolphin Dash API
 
-This is a backend REST API built with **Node.js**, **Express**, and **MongoDB** for a Zyper Dolphin Dash betting platform. It handles user registrations, token/credit deposits, placing bets, ending betting rounds, staking NFTs, and inviting friends.
+This is a backend REST API built with **Node.js**, **Express**, and **MongoDB** for Zyper Dolphin Dash. It handles user registrations, token/credit deposits, placing bets, ending betting rounds, staking NFTs, and inviting friends.
 
 ---
 
