@@ -86,8 +86,14 @@ exports.inviteFriend = async (req, res) => {
     const user = await User.findOne({ telegramId: req.params.telegramId });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    const { friendTelegramId } = req.body;
-    user.friends.push(friendTelegramId);
+    const { friendUsername } = req.body;
+    if (!friendUsername) return res.status(400).json({ error: "Friend username is required" });
+
+    if (user.friends.includes(friendUsername)) {
+      return res.status(400).json({ error: "Friend already invited" });
+    }
+
+    user.friends.push(friendUsername);
 
     await user.save();
     res.json({ message: "Friend invited", user });
@@ -96,7 +102,8 @@ exports.inviteFriend = async (req, res) => {
   }
 };
 
-// Withdraw
+
+// Withdraw (TON only)
 exports.withdraw = async (req, res) => {
   try {
     const { amount, isTon } = req.body;
@@ -104,23 +111,23 @@ exports.withdraw = async (req, res) => {
 
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    if (isTon && user.tonBalance < amount) {
+    if (!isTon) {
+      return res.status(400).json({ error: "Only TON withdrawals are allowed" });
+    }
+
+    if (user.tonBalance < amount) {
       return res.status(400).json({ error: "Insufficient TON balance" });
     }
 
-    if (!isTon && user.creditBalance < amount) {
-      return res.status(400).json({ error: "Insufficient credit balance" });
-    }
-
-    if (isTon) user.tonBalance -= amount;
-    else user.creditBalance -= amount;
-
+    user.tonBalance -= amount;
     await user.save();
+
     res.json({ message: "Withdraw successful", user });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Get single user
 exports.getUser = async (req, res) => {
