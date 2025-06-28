@@ -3,7 +3,14 @@ const BettingRound = require('../models/bettingRoundModel');
 // Start a new bet
 exports.startBet = async (req, res) => {
   try {
-    const bet = new BettingRound(req.body);
+    const count = await BettingRound.countDocuments();
+    const bettingRoundNo = count + 1;
+
+    const bet = new BettingRound({
+      ...req.body,
+      bettingRoundNo,
+    });
+
     await bet.save();
     res.status(201).json(bet);
   } catch (err) {
