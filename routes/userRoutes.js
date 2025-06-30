@@ -1,24 +1,30 @@
 
 const express = require('express');
 const router = express.Router();
-
-router.post('/register', /* controller function here */);
-router.post('/deposit/:telegramId', );
-router.post('/placebet/:telegramId',);
-router.post('/stakenft/:telegramId',);
-router.post('/invite/:telegramId',);
-router.post('/witdhraw/:telegramId',);
+const userController = require('../controllers/userController');
 
 
-router.get('/getuser/:telegramId', /* controller function here */);
-router.get('/getbetsbyuser/:telegramId',);
-router.get('/getstakednfts/:telegramId',);
+router.post('/register', userController.registerUser);
+router.post('/deposit/:telegramId', userController.depositTo);
+router.post('/placebet/:telegramId', userController.placeBet);
+router.post('/stakenft/:telegramId', (req,res)=>{
+    res.send('yet to implement stake nft');
+});
+router.post('/invite/:telegramId',(req,res)=>{
+    res.send('yet to implement invite functionality');
+});
+router.post('/withdraw/:telegramId',userController.withdraw);
 
-router.put('/:telegramId', /* controller function here */);
 
-router.delete('/:telegramId', /* controller function here */);
+router.get('/getuser/:telegramId', userController.getUser);
+router.get('/getbetsbyuser/:telegramId',userController.getBetsByUser);
+router.get('/getstakednfts/:telegramId',userController.getStakedNFTs);
 
-router.get('/', /* controller function here */);
+router.put('/:telegramId', userController.updateUser);
+
+router.delete('/:telegramId', userController.deleteUser);
+
+router.get('/', userController.getAllUsers);
 
 const userRouter = router;
 module.exports = userRouter;

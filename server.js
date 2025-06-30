@@ -1,45 +1,50 @@
+require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const userRouter = require('./routes/userRoutes');
 const bettingRouter = require('./routes/bettingRoutes');
 
-const mongoURI = process.env.MONGO_URI; // Replace with your MongoDB URI
 const app = express();
+const port = process.env.PORT || 3000;
 
-function connectDb(){
-
-    mongoose.connect(mongoURI)
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-        console.error('Failed to connect to MongoDB:', err);
-    });
+// MongoDB Connection
+async function connectDb() {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log('✅ Connected to MongoDB');
+    } catch (err) {
+        console.error('❌ MongoDB connection error:', err);
+        process.exit(1); // stop app on db failure
+    }
 }
 
+// Middleware
 const corsOptions = {
-    origin: '*', 
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use('/user',userRouter);
-app.use('/bet',bettingRouter);
 
+// Routes
+app.use('/api/users', userRouter);
+app.use('/api/bets', bettingRouter);
+
+// Root Route
 app.get('/', (req, res) => {
-    res.send('GET request received!');
+    res.send('Welcome to zyper Dolphin Dash Betting API');
 });
 
-app.post('/', express.json(), (req, res) => {
+app.post('/', (req, res) => {
     res.json({ message: 'POST request received!', data: req.body });
 });
 
-const port = process.env.PORT || 3000;
-
-app.listen(port,()=>{
-    console.log(`server has started on port ${port}`);
-    connectDb();
-})
+// Start server after DB connection
+connectDb().then(() => {
+    app.listen(port, () => {
+        console.log(`🚀 Server running on port ${port}`);
+    });
+});
