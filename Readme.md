@@ -34,20 +34,20 @@ This is a backend REST API built with **Node.js**, **Express**, and **MongoDB** 
 ## ⚙️ Setup Instructions
 
 1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd betting-app
+  ```bash
+  git clone https://github.com/ZyperLLC/DolphinDashBackend.git
+  cd betting-app
 
 2. **Install Dependencies**
   npm install
 
 3. **Create a .env file**
 
- PORT=3000
- MONGO_URI=
+PORT=3000
+MONGO_URI=
 
 4. **Run the Server**
- node server.js
+node server.js
 
 ## 🔗  Base URL
 http://localhost:3000/api
@@ -136,4 +136,4 @@ POST /api/bets/endbet
 
 
 ## 📅 Last Updated
-June 27, 2025
+June 30, 2025
