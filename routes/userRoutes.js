@@ -10,9 +10,7 @@ router.post('/placebet/:telegramId', userController.placeBet);
 router.post('/stakenft/:telegramId', (req,res)=>{
     res.send('yet to implement stake nft');
 });
-router.post('/invite/:telegramId',(req,res)=>{
-    res.send('yet to implement invite functionality');
-});
+router.post('/invite/:telegramId',userController.inviteFriend);
 router.post('/withdraw/:telegramId',userController.withdraw);
 
 

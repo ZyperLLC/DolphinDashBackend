@@ -113,6 +113,7 @@ exports.inviteFriend = async (req, res) => {
     }
 
     user.friends.push(friendUsername);
+    user.creditBalance += 0.01;
 
     await user.save();
     res.json({ message: "Friend invited", user });
@@ -120,7 +121,6 @@ exports.inviteFriend = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 // Withdraw (TON only)
 exports.withdraw = async (req, res) => {
