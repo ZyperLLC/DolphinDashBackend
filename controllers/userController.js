@@ -1,3 +1,4 @@
+const BettingRound = require('../models/bettingRoundModel');
 const User = require('../models/userModel');
 
 // Register user
@@ -39,6 +40,14 @@ exports.placeBet = async (req, res) => {
       betId, amountBet, numberBettedOn,
       hasWon, amountWon, useTon, holdingNFT
     } = req.body;
+    
+    const round = await BettingRound.findOne({
+      bettingRoundNo:betId
+    });
+
+    if(round.hasEnded){
+      res.json({error:"Round closed"});
+    }
 
     if (useTon && user.tonBalance < amountBet) {
       return res.status(400).json({ error: 'Insufficient TON balance' });
@@ -49,8 +58,16 @@ exports.placeBet = async (req, res) => {
     }
 
     // Deduct balance
-    if (useTon) user.tonBalance -= amountBet;
-    else user.creditBalance -= amountBet;
+    if (useTon){
+      user.tonBalance -= amountBet;
+      round.tonAmountBetted += amountBet;  
+    }
+    else{
+       user.creditBalance -= amountBet;
+       round.creditAmountBetted += amountBet;
+    }
+    round.totalAmountBetted += amountBet;
+    round.totalBets++;
 
     // Add bet
     user.betsPlace.push({
@@ -58,7 +75,9 @@ exports.placeBet = async (req, res) => {
     });
 
     await user.save();
-    res.json(user);
+    await round.save();
+
+    res.json({user,round});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

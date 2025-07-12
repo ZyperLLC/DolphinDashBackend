@@ -19,14 +19,17 @@ const bettingSchema = new mongoose.Schema({
     required: true,
     min: 0,
     max: 36,
+    default: 0
   },
   totalBets: {
     type: Number,
     required: true,
+    default:0
   },
   totalAmountBetted: {
     type: Number,
     required: true,
+    default:0
   },
   tonAmountBetted: {
     type: Number,
