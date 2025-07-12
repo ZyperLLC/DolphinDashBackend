@@ -7,7 +7,7 @@ exports.startBet = async (req, res) => {
     const count = await BettingRound.countDocuments();
     const lastbet = await BettingRound.findOne({bettingRoundNo:count});
     if(lastbet && lastbet.hasEnded==false){
-      res.status(500).message("Last round not ended yet");
+      res.status(500).json("Last round not ended yet");
     }
     const bettingRoundNo = count + 1;
 
