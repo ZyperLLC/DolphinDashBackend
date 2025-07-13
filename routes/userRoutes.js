@@ -3,13 +3,10 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 
-
 router.post('/register', userController.registerUser);
 router.post('/deposit/:telegramId', userController.depositTo);
 router.post('/placebet/:telegramId', userController.placeBet);
-router.post('/stakenft/:telegramId', (req,res)=>{
-    res.send('yet to implement stake nft');
-});
+router.post('/stakenft/:telegramId', userController.stakeNFT);
 router.post('/invite/:telegramId',userController.inviteFriend);
 router.post('/withdraw/:telegramId',userController.withdraw);
 
