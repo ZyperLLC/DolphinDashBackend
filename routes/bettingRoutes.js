@@ -5,6 +5,7 @@ const bettingController = require('../controllers/bettingController');
 
 router.post('/startbet', bettingController.startBet);
 router.post('/endbet', bettingController.endBet);
+router.post('/stopbetting',bettingController.stopbetting);
 
 router.get('/',bettingController.getAllBets); //get all bets
 router.get('/getbet/:betId', bettingController.getBetsByBetId);

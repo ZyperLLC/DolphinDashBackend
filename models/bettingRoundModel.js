@@ -14,6 +14,10 @@ const bettingSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  hasBettingStopped:{
+    type:Boolean,
+    deafult:false,
+  },
   winningNumber: {
     type: Number,
     required: true,

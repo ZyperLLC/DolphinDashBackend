@@ -76,6 +76,20 @@ exports.endBet = async (req, res) => {
   }
 };
 
+
+exports.stopbetting= async (req,res)=>{
+  try{
+    const rounds = await BettingRound.find();
+  const latestRound = rounds[rounds.length-1];
+  latestRound.hasBettingStopped = true;
+  latestRound.save();
+  res.json(latestRound);
+  }catch(err){
+    res.status(500).json({
+      error:err
+    })
+  }
+}
 // Get all bets
 exports.getAllBets = async (_req, res) => {
   try {

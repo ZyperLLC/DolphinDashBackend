@@ -23,4 +23,4 @@ router.delete('/:telegramId', userController.deleteUser);
 router.get('/', userController.getAllUsers);
 
 const userRouter = router;
-module.exports = userRouter;
+module.exports = userRouter;    
