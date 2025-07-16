@@ -216,3 +216,35 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.sendCredits = async(req,res)=>{
+  try{
+    const users = await User.find({
+      betsPlace: {
+        $elemMatch: {
+          hasWon: true,
+          useTon: false
+        }
+      }
+    });
+    let updatedUser = [];
+    for (const user of users) {
+      let totalToAdd = 0;
+  
+      for (const bet of user.betsPlace) {
+        if (bet.hasWon && !bet.useTon) {
+          totalToAdd += bet.amountWon || 0;
+        }
+      }
+  
+      if (totalToAdd > 0) {
+        user.creditBalance = (user.creditBalance || 0) + totalToAdd;
+        updatedUser.push(user);
+        await user.save();
+      }
+    }
+    res.status(201).json({users:updatedUser});
+  }catch(err){
+    res.status(500).json({error:err.message});
+  }
+}
