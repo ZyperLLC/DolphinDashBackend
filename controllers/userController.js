@@ -60,13 +60,13 @@ exports.placeBet = async (req, res) => {
     // Deduct balance
     if (useTon){
       user.tonBalance -= amountBet;
-      round.tonAmountBetted += amountBet;  
+      round.tonAmountBetted += (amountBet/1000000000);  
     }
     else{
        user.creditBalance -= amountBet;
        round.creditAmountBetted += amountBet;
     }
-    round.totalAmountBetted += amountBet;
+    round.totalAmountBetted += useTon? (amountBet/1000000000):amountBet;
     round.totalBets++;
 
     // Add bet
