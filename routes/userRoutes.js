@@ -9,8 +9,6 @@ router.post('/placebet/:telegramId', userController.placeBet);
 router.post('/stakenft/:telegramId', userController.stakeNFT);
 router.post('/invite/:telegramId',userController.inviteFriend);
 router.post('/withdraw/:telegramId',userController.withdraw);
-router.post('/sendcredits',userController.sendCredits);
-router.post('/updateamount',userController.updateAmount);
 
 
 router.get('/getuser/:telegramId', userController.getUser);
