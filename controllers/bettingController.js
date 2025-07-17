@@ -52,9 +52,6 @@ exports.endBet = async (req, res) => {
           const multiplier = bet.holdingNFT ? 7.7 : 7;
           bet.amountWon = bet.amountBet * multiplier;
           amountPaidToWinners += bet.amountWon;
-          if(!bet.useTon){
-            user.creditBalance+=bet.amountWon;
-          }
           updated = true;
         }
       }
