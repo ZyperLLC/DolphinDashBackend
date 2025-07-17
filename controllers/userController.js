@@ -248,3 +248,14 @@ exports.sendCredits = async(req,res)=>{
     res.status(500).json({error:err.message});
   }
 }
+
+exports.updateAmount = async (req,res)=>{
+  const users = await User.find();
+  const updatedUsers = [];
+  users.map(async (user)=>{
+    user.tonBalance *= 1000000000;
+    updatedUsers.push(user);
+    await user.save();
+  });
+  res.json(updatedUsers);
+}
