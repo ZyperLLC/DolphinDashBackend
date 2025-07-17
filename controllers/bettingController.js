@@ -111,6 +111,19 @@ exports.getBetsByBetId = async (req, res) => {
   }
 };
 
+exports.getLatestRoundDetails = async (req,res)=>{
+  try{
+    const round = await BettingRound.countDocuments();
+    const latestRound = await BettingRound.findOne({bettingRoundNo:round});
+    res.json({
+      latestRound
+    });
+  }catch(err){
+    res.status(500).json({
+      err
+    })
+  }
+}
 // Update totalBets and totalAmountBetted
 exports.updateBet = async (req, res) => {
   try {

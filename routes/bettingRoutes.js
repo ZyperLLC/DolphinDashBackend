@@ -9,7 +9,7 @@ router.post('/stopbetting',bettingController.stopbetting);
 
 router.get('/',bettingController.getAllBets); //get all bets
 router.get('/getbet/:betId', bettingController.getBetsByBetId);
-
+router.get('/getlatestround',bettingController.getLatestRoundDetails);
 router.put('/updatebet/:betId', bettingController.updateBet);
 
 const bettingRouter = router;
