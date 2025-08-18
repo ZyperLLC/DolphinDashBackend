@@ -22,16 +22,8 @@ async function connectDb() {
 
 // Middleware
 const allowedOrigins = JSON.parse(process.env.ALLOWED_ORIGINS || '["http://localhost:3000"]');
-console.log("Allowed origins:", allowedOrigins);
-console.log("API_KEY from env:", process.env.API_KEY);
 
 const validateApi = (req,res,next)=>{
-    console.log("=== validateApi middleware called ===");
-    console.log("All headers:", req.headers);
-    console.log("x-api-key header:", req.headers['x-api-key']);
-    console.log("X-API-Key header:", req.headers['x-api-key']);
-    console.log("API key from env:", process.env.API_KEY);
-    
     const apiKey = req.headers['x-api-key'];
     if(!apiKey){
         console.log("No API key provided");
