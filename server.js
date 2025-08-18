@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRouter = require('./routes/userRoutes');
 const bettingRouter = require('./routes/bettingRoutes');
+const internalUserRouter = require('./routes/internalUserRoutes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +22,30 @@ async function connectDb() {
 
 // Middleware
 const allowedOrigins = JSON.parse(process.env.ALLOWED_ORIGINS || '["http://localhost:3000"]');
+console.log("Allowed origins:", allowedOrigins);
+console.log("API_KEY from env:", process.env.API_KEY);
+
+const validateApi = (req,res,next)=>{
+    console.log("=== validateApi middleware called ===");
+    console.log("All headers:", req.headers);
+    console.log("x-api-key header:", req.headers['x-api-key']);
+    console.log("X-API-Key header:", req.headers['x-api-key']);
+    console.log("API key from env:", process.env.API_KEY);
+    
+    const apiKey = req.headers['x-api-key'];
+    if(!apiKey){
+        console.log("No API key provided");
+        return res.status(401).json({error:'API key required'});
+    }
+    
+    if(apiKey !== process.env.API_KEY){
+        console.log("Invalid API key provided:", apiKey);
+        return res.status(401).json({error:'Unauthorized'});
+    }
+    
+    console.log("API key validated successfully");
+    next();
+}
 
 const corsOptions = {
     origin: function (origin, callback) {
@@ -31,16 +56,24 @@ const corsOptions = {
         }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'X-API-Key'],
     credentials: true 
 };
 
-app.use(cors(corsOptions));
+// CORS options for internal routes (allow from anywhere)
+const internalCorsOptions = {
+    origin: true, // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'X-API-Key'],
+    credentials: true 
+};
+
 app.use(express.json());
 
-// Routes
-app.use('/api/users', userRouter);
-app.use('/api/bets', bettingRouter);
+// Routes - Different protection levels
+app.use('/api/users',cors(corsOptions), userRouter); // Public routes for frontend
+app.use('/api/internal/users', cors(internalCorsOptions), validateApi, internalUserRouter); // Admin only with API key, allow from anywhere
+app.use('/api/bets',cors(corsOptions), bettingRouter); // Public routes for frontend
 
 // Root Route
 app.get('/', (req, res) => {
