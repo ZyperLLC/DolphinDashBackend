@@ -28,6 +28,17 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
 
+  creditBets: {
+    roundId: {
+      type: Number,
+      default: null
+    },
+    numberOfBets: {
+      type: Number,
+      default: 0
+    }
+  },
+
   betsPlace: [
     {
       betId: {

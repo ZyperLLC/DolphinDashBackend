@@ -7,6 +7,7 @@ exports.startBet = async (req, res) => {
     const count = await BettingRound.countDocuments();
     const lastbet = await BettingRound.findOne({bettingRoundNo:count});
     if(lastbet && lastbet.hasEnded==false){
+      console.log('Error in startBet: Last round not ended yet. Round:', count);
       res.status(500).json("Last round not ended yet");
     }
     const bettingRoundNo = count + 1;
@@ -19,6 +20,7 @@ exports.startBet = async (req, res) => {
     await bet.save();
     res.status(201).json(bet);
   } catch (err) {
+    console.log('Error in startBet:', err.message);
     res.status(500).json({ error: err.message });
   }
 };
@@ -29,8 +31,14 @@ exports.endBet = async (req, res) => {
     const { betId, winningNumber } = req.body;
     const bet = await BettingRound.findOne({bettingRoundNo:betId});
 
-    if (!bet) return res.status(404).json({ error: "Bet not found" });
-    if (bet.hasEnded) return res.status(500).json({error:"Round already ended"});
+    if (!bet) {
+      console.log('Error in endBet: Bet not found for betId:', betId);
+      return res.status(404).json({ error: "Bet not found" });
+    }
+    if (bet.hasEnded) {
+      console.log('Error in endBet: Round already ended for betId:', betId);
+      return res.status(500).json({error:"Round already ended"});
+    }
     // Find all users who placed a winning bet on this round
     const users = await User.find({
       betsPlace: {
@@ -69,6 +77,7 @@ exports.endBet = async (req, res) => {
 
     res.json({ message: "Bet ended",bet, users });
   } catch (err) {
+    console.log('Error in endBet:', err.message);
     res.status(500).json({ error: err.message });
   }
 };
@@ -82,6 +91,7 @@ exports.stopbetting= async (req,res)=>{
   latestRound.save();
   res.json(latestRound);
   }catch(err){
+    console.log('Error in stopbetting:', err.message);
     res.status(500).json({
       error:err
     })
@@ -93,6 +103,7 @@ exports.getAllBets = async (_req, res) => {
     const bets = await BettingRound.find();
     res.json(bets);
   } catch (err) {
+    console.log('Error in getAllBets:', err.message);
     res.status(500).json({ error: err.message });
   }
 };
@@ -101,9 +112,13 @@ exports.getAllBets = async (_req, res) => {
 exports.getBetsByBetId = async (req, res) => {
   try {
     const bet = await BettingRound.findOne({bettingRoundNo:req.params.betId});
-    if (!bet) return res.status(404).json({ error: "Bet not found" });
+    if (!bet) {
+      console.log('Error in getBetsByBetId: Bet not found for betId:', req.params.betId);
+      return res.status(404).json({ error: "Bet not found" });
+    }
     res.json(bet);
   } catch (err) {
+    console.log('Error in getBetsByBetId:', err.message);
     res.status(500).json({ error: err.message });
   }
 };
@@ -116,6 +131,7 @@ exports.getLatestRoundDetails = async (req,res)=>{
       latestRound
     });
   }catch(err){
+    console.log('Error in getLatestRoundDetails:', err.message);
     res.status(500).json({
       err
     })
@@ -132,6 +148,7 @@ exports.updateBet = async (req, res) => {
     );
     res.json(bet);
   } catch (err) {
+    console.log('Error in updateBet:', err.message);
     res.status(500).json({ error: err.message });
   }
 };
